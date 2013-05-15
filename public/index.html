@@ -106,8 +106,8 @@ d3.json("flakar.json", function(error, topology) {
                   gravity: 'w', 
                   html: true, 
                   title: function() {
-                    var d = this.__data__, lt = d.lat;
-                    return 'Hi there! My latitute is' + lt; 
+                    var d = this.__data__, sz = d.M, dp = d.dpth;
+                    return 'Size: ' + sz + '(Ricther)' + '\n' + 'Depth: ' + dp + 'km' ; 
                   }
             
           });
