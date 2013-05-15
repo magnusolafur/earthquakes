@@ -1,46 +1,12 @@
 
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
 
-body {
-  margin: 0;
-  background: #a5bfdd;
-  overflow: hidden;
-}
-
-.loading {
-  text-align: center;
-  margin: 80px;
-}
-
-div {
-  position: absolute;
-  font: 10px sans-serif;
-  background: #a5bfdd;
-  padding: 10px;
-  left: 0;
-  bottom: 0;
-}
-
-a {
-  color: #777;
-}
-
-path {
-  stroke: #d9d9d5;
-  stroke-linejoin: round;
-  stroke-width: 0.25px;
-}
-
-</style>
 
 <p class="loading">Loading</p>
-<link href="tipsy.css" rel="stylesheet" type="text/css" />
+<link href="style.css" rel="stylesheet" type="text/css" />
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
-<script type="text/javascript" src="jquery.tipsy.js"></script>
 <script>
 d3.json("flakar.json", function(error, topology) {
 
@@ -68,6 +34,10 @@ d3.json("flakar.json", function(error, topology) {
     .enter().append("path")
     .style("fill", "f4f3f0");
 
+  var div = d3.select("body").append("div")   
+    .attr("class", "tooltip")               
+    .style("opacity", 0);  
+
   d3.select(window).on("resize", resized);
   d3.select(".loading").remove();
 
@@ -83,6 +53,8 @@ d3.json("flakar.json", function(error, topology) {
     svg.attr("width", width).attr("height", height);
     contour.attr("d", path);
   }
+
+
 
   d3.csv("data.csv", function(data) {
             
@@ -101,15 +73,19 @@ d3.json("flakar.json", function(error, topology) {
                })
                .attr("opacity", function(d) { return opacity(d.dpth); })
                .style("fill", "red")
+               .on("mouseover", function(d) {      
+                  div.transition()        
+                  .duration(200)      
+                  .style("opacity", .9);      
+                  div .html('Size: ' + d.M + "<br/>"  + 'Depth: ' + d.dpth + 'Km ')  
+                  .style("left", (d3.event.pageX) + "px")     
+                  .style("top", (d3.event.pageY - 28) + "px");    
+                })                  
+                .on("mouseout", function(d) {       
+                  div.transition()        
+                  .duration(500)      
+                  .style("opacity", 0);  
 
-                $('svg circle').tipsy({ 
-                  gravity: 'w', 
-                  html: true, 
-                  title: function() {
-                    var d = this.__data__, sz = d.M, dp = d.dpth;
-                    return 'Size: ' + sz + '(Ricther)' + '\n' + 'Depth: ' + dp + 'km' ; 
-                  }
-            
           });
  
   });
