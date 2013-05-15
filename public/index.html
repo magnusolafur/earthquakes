@@ -69,7 +69,7 @@ d3.json("flakar.json", function(error, topology) {
                  return projection([d.lon, d.lat])[1];
                })
                .attr("r", function(d) {
-                return Math.sqrt(parseInt(d.M) * 100);
+                return Math.sqrt(parseInt(d.M) * 300);
                })
                .attr("opacity", function(d) { return opacity(d.dpth); })
                .style("fill", "red")
