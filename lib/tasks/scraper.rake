@@ -5,7 +5,7 @@ task :scraper => :environment do
 
 	doc = Nokogiri::HTML(open("http://hraun.vedur.is/ja/skjalftar/skjlisti.html"))
 	csv = CSV.open("public/eartquakes.csv", 'w')
-	csv << ["date", "time", "lon", "lat", "depth", "size", "quality", "dist", "dir", "loc"]
+	csv << ["date", "t", "lon", "lat", "depth", "sz", "quality", "dist", "dir", "loc"]
 	i = 0
 	doc.xpath('//table//tr').each do |row|
     	tarray = [] #temporary array
