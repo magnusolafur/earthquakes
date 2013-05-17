@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {font-size:11px;}
+path {
+  stroke: black;
+  stroke-width: 0.25px;
+}
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v0.min.js"></script>
+<script>
+var width = 960,
+    height = 475;
+
+var projection = d3.geo.mercator()
+    .center([-22, 64 ])
+    .scale(99999);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var color = d3.scale.linear()
+    .domain([0,900,1100])
+    .range(["green","yellow","white"]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var g = svg.append("g");
+
+var loading = g.append("text").attr({x:500,y:250}).text("Loading")
+
+
+
+d3.json("flakar.json", function(error, topology) {
+  loading.remove();
+  g.selectAll("path")
+    .data(topojson.object(topology, topology.objects.flakar).geometries)
+  .enter()
+    .append("path")
+    .attr("d", path)
+    .style("fill",function(d) { return color(d.properties.Z)})
+});
+</script>
+<br>Underlying data © <a href="http://www.lmi.is">National Land Survey of Iceland</a> under the following <a href="http://www.lmi.is/wp-content/uploads/2013/01/GeneralTermsNLSI.pdf">Terms of Use</a>.   
+</body>
+</html>
